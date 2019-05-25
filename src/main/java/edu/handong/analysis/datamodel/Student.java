@@ -24,7 +24,6 @@ public class Student {
 	
 	/**
 	 * addCourse method add a Course instance created while reading line to the CourseTaken ArrayList in the Student instance.
-	 * addCourse 메서드는 학생 인스턴스의 CourseTaken ArrayList에 선을 읽는 동안 생성된 과정 인스턴스를 추가한다.
 	 * @param newRecord
 	 */
 	public void addCourse(Course newRecord) {
@@ -33,9 +32,6 @@ public class Student {
 	
 	/**
 	 * getSemestersByYearAndSemester method creates a hashmap to store the student’s sequential semester information by using strong year and semester information. For example, a student entered to Handong at 2001-1 has first semester at 2001-1, second semester at 2001-2, and 2002-1 as third semester. This will the data structure shown below. Seasonal semesters are included as official semesters.
-	 * getSestersByearAndSemester 방법은 강력한 연도 및 학기 정보를 사용하여 학생의 순차 학기 정보를 저장하는 해시맵을 만든다. 
-	 * 예를 들어, 2001-1에 한동에 입학한 학생은 2001-1, 2001-2, 2002-1에 3학기가 있다. 이렇게 하면 아래와 같은 데이터 구조가 된다. 계절학기는 공식학기로 포함되어 있다.
-	 * 학기 수 세는 느낌.
 	 * @return
 	 */
 	public HashMap<String,Integer> getSemestersByYearAndSemester(){//??coursesTaken이 main에서 사용되지 않으면 쓸 수 없자나...?
@@ -81,25 +77,15 @@ public class Student {
 	
 
 	/* Add getter and setter for the field if needed*/
-//삭제하기 
+	//컴파일을 위해서.
+	/*
 	public ArrayList<Course> getCoursesTaken() {
 		// TODO Auto-generated method stub
 		return coursesTaken;
 	}
 	public void setCoursesTaken(ArrayList<Course> coursesTaken) {
 		this.coursesTaken = coursesTaken;
-	}
-	/*
-	 * //반복 
-		Course course = new Course(lines.get(0)); 
-		student.addCourse(course);
-		course = new Course(lines.get(1)); 
-		student.addCourse(course);
-		ArrayList<Course> coursesTaken = new ArrayList<Course>(); 
-		coursesTaken= student.getCoursesTaken();
-		System.out.println(coursesTaken.get(1).getCourseName());
-		*/
+	}*/
 	
-
 	
 }

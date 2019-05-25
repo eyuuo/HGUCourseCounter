@@ -15,12 +15,6 @@ public class Course {
 	private int yearTaken;
 	private int semesterCourseTaken;
 
-//	//지우기*& 
-//	public static void main(String[] args) {
-//		String line = "0001, 200802, Major1, Major2, GEK10001, 채플(한국어) 1, 0.0, 2002, 1";
-//		Course c = new Course(line);
-//		
-//	}
 
 	
 	/**
@@ -37,7 +31,7 @@ public class Course {
 		this.courseCredit = line.split(",")[6].trim();
 		this.setYearTaken(Integer.parseInt(line.split(",")[7].trim()));
 		this.setSemesterCourseTaken(Integer.parseInt(line.split(",")[8].trim()));
-		
+		//컴파일 
 //		System.out.println("------course-----\n"+studentId);
 //		System.out.println(yearMonthGraduated+"\n"+firstMajor+"\n"+secondMajor
 //				+"\n"+courseCode+"\n"+courseName+"\n"+courseCredit+"\n"+yearTaken+"\n"+semesterCourseTaken);
@@ -61,8 +55,6 @@ public class Course {
 	public void setCourseName(String courseName) {
 		this.courseName = courseName;
 	}
-
-
 
 	public int getYearTaken() {
 		return yearTaken;

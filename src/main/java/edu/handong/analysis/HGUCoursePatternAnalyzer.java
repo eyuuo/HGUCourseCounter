@@ -21,7 +21,6 @@ public class HGUCoursePatternAnalyzer {
 	/**
 	 * This method runs our analysis logic to save the number courses taken by each student per semester in a result file.
 	 * Run method must not be changed!!
-	 * 학기당 학생 한명당 수강하는 강좌 수를 결과 파일에 저장하기 위한 분석 논리를 실행.
 	 * @param args
 	 */
 	public void run(String[] args) {//수정 하지 말 것.
@@ -35,13 +34,11 @@ public class HGUCoursePatternAnalyzer {
 			System.exit(0);//파일의 경로가 올바르지 않을때. 
 		} 
 		
-		String dataPath = args[0]; // csv file to be analyzed //hw5data2.csv 또는 /Users/eyuuo/Documents/GitHub/HGUCourseCounter/hw5data2.csv
-		String resultPath = args[1]; // the file path where the results are saved.//result.csv 또는  /Users/eyuuo/Documents/GitHub/HGUCourseCounter/result.csv
+		String dataPath = args[0]; // csv file to be analyzed 
+		String resultPath = args[1]; // the file path where the results are saved.
 		
-		//line에 한줄씩 넣는다.	0
 		ArrayList<String> lines = Utils.getLines(dataPath, true);
 		
-		//0
 		students = loadStudentCourseRecords(lines);
 		
 		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
@@ -53,7 +50,7 @@ public class HGUCoursePatternAnalyzer {
 		// Write a file (named like the value of resultPath) with linesTobeSaved.
 		Utils.writeAFile(linesToBeSaved, resultPath);
 		
-		//System.out.println("-----괜찮----");
+		
 	}
 	
 	/**
@@ -75,20 +72,8 @@ public class HGUCoursePatternAnalyzer {
 		
 	//<put위한 과정.>
 		//반복 : for 반목문으 파일의 모든 학생들을의 아이디를 읽는다. 그리고 그 수만큼 put.
-		//학생 ID 모으기1 -> 무작위 순서일 때 문제가 생긴다.
-//		for(int i = 0; i< lines.size();i++) {
-//			if(studentIdKey[kk].equals(lines.get(i).split(",")[0])) {}
-//			else {
-//				kk++;
-//				studentIdKey[kk]=lines.get(i).split(",")[0];			
-//			}
-//		}
-//		//학생 ID 모으기1. 확인 --지우기 
-//		for(int i=0;i<studentIdKey.length;i++)
-//			if(studentIdKey[i]!=null)
-//			System.out.println(studentIdKey[i]);
 		
-		//학생 ID 모으기2 hashset이용 ->Sorting 필요
+		//학생 ID 모으기 hashset이용 ->Sorting 필요
 		HashSet<String> key = new HashSet<String>();
 		for(int i = 0; i< lines.size();i++)
 			key.add(lines.get(i).split(",")[0]);
@@ -96,15 +81,6 @@ public class HGUCoursePatternAnalyzer {
 		//학생 ID 모으기2 정렬을 위해 arraylist를 사용한다.->안해도 될지도??------------마지막에 확인.
 		ArrayList<String> keylist = new ArrayList<String>(key); 
 		Collections.sort(keylist);
-		
-		//ID확인 - 지우기 
-//		for(String a : keylist) {
-//			System.out.println(a+"+"+keylist.size());
-//		}
-
-		//addCourse 확인-지우기 
-		ArrayList<Course> coursesTaken = new ArrayList<Course>(); 
-		
 		
 		for(int j=0;j<keylist.size();j++) {
 		//addCourse	
@@ -114,20 +90,10 @@ public class HGUCoursePatternAnalyzer {
 				if(lines.get(i).split(",")[0].equals(keylist.get(j))){
 					course = new Course(lines.get(i));
 					student.addCourse(course);		
-					//k++;//addCourse확인 -지우기 
 					}//if1_아이디가 일치하는 line만 Course로.
-				}//for-i
-				//addCourse 확인-지우기 2줄 
-					//coursesTaken= student.getCoursesTaken();
-					//for(int i=0;i<k;i++) System.out.println(coursesTaken.get(i).getCourseName());
-					//k=0;//addCourse확인 -지우기 
-		//getNumCourseInNthSementer
-				//int q =student.getNumCourseInNthSementer(4);
-				//	System.out.println("\n---"+j+"------: "+q);
-				//hash Map에 학생 정보 넣기 
-				students.put(keylist.get(j), student);	
-				//student.getSemestersByYearAndSemester();
-				
+				}//for-i	
+		//hash Map에 학생 정보 넣기 
+				students.put(keylist.get(j), student);			
 		}//for-j
 		//잘 push되었는지 확인 
 		//System.out.print(students.get("0002").getCoursesTaken().get(0).getCourseName());
@@ -139,14 +105,12 @@ public class HGUCoursePatternAnalyzer {
 
 	/**
 	 * This method generate the number of courses taken by a student in each semester. The result file look like this:
-	 * 매 학기 수강생 수를 산출한다. 결과는 아래와 같다. 한 학생의 학기별 들은 수업의 수와 학점의 양. 파일로 내보낸다...?
 	 * StudentID, TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester 
 	 * 0001,14,1,9
      * 0001,14,2,8
 	 * ....
 	 * 
 	 * 0001,14,1,9 => this means, 0001 student registered 14 semeters in total. In the first semeter (1), the student took 9 courses.
-	 * 
 	 * ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
 	 * @param sortedStudents
 	 * @return
