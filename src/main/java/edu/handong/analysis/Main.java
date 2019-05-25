@@ -5,4 +5,4 @@ public class Main {
 		HGUCoursePatternAnalyzer analyzer = new HGUCoursePatternAnalyzer();
 		analyzer.run(args);
 	}
-} 
+}  
