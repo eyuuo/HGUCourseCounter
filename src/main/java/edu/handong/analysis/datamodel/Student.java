@@ -10,6 +10,7 @@ import java.util.HashSet;
  * not with a student name.
  */
 public class Student {
+	
 	private String studentId;
 	private ArrayList<Course> coursesTaken; // List of courses student has taken
 	private HashMap<String,Integer> semestersByYearAndSemester; 

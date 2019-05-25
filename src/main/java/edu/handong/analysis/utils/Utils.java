@@ -60,8 +60,8 @@ public class Utils {
             Files.write(path, content.getBytes());
             //System.out.println(Files.readAllLines(path));
         } catch (IOException e) {
-        	
             e.printStackTrace();
+            System.exit(0);
         }
 		
 		
