@@ -176,8 +176,9 @@ public class HGUCoursePatternAnalyzer2 {
 		String CourseName=null;
 		int TotalStudents=0;
 		
-		int Students=0;
-		HashMap<String,Integer> StudentsTaken = new HashMap<String,Integer>();
+		
+		ArrayList <String> StudentsTaken = new ArrayList<String>();
+		HashMap <String, Integer> StudentsTaken2 = new HashMap<String,Integer>();
 		float Rate=0;//=TotalStudents/StudentsTaken..
 		Course course;
 		 
@@ -186,35 +187,52 @@ public class HGUCoursePatternAnalyzer2 {
 		
 		for(int i=0; i<lines.size();i++) {
 			course = new Course(lines.get(i));
+			
 			if(CouseCode.equals(course.getCourseCode()))
 				{
 				if(course.getYearTaken()>=start&&course.getYearTaken()<end) 
 				{
 					CourseName = course.getCourseName();
-					YearAndSemester.add(course.getYearTaken()+", "+course.getSemesterCourseTaken());
-					//if()
-					//Students++;
-					StudentsTaken.put(course.getYearTaken()+", "+course.getSemesterCourseTaken(),Students++);
+					YearAndSemester.add(course.getYearTaken()+", "+course.getSemesterCourseTaken());	
+					StudentsTaken.add(course.getYearTaken()+", "+course.getSemesterCourseTaken());
 					TotalStudents++;
 				}
-				
-			}	
-			
+			}
+
 		}
 		
 		
 		//돌리고 넣
 		ArrayList<String> YearAndSemester2 = new ArrayList<String>(YearAndSemester); 
 		Collections.sort(YearAndSemester2);
-	
+		
+		Collections.sort(StudentsTaken);
+		
+		int [] Students=new int[YearAndSemester2.size()];
+		for(int j=0; j<StudentsTaken.size();j++)
+		for(int i=0; i<YearAndSemester2.size();i++) {
+			if(StudentsTaken.get(j).equals(YearAndSemester2.get(i))) {
+				Students[i]++;
+				//System.out.println(":"+StudentsTaken);
+				//System.out.println(":"+YearAndSemester2);
+				
+				}
+		}
+		for(int k:Students) {
+			//System.out.println(k);
+		}
+		for(int i=0; i<YearAndSemester2.size();i++) {
+			StudentsTaken2.put(YearAndSemester2.get(i),Students[i]);
+		}
 		
 		for(int i=0; i<YearAndSemester2.size();i++) {
-			Rate = Float.valueOf(StudentsTaken.get(YearAndSemester2.get(i)))/Float.valueOf(TotalStudents);
+			
+			Rate = Float.valueOf(StudentsTaken2.get(YearAndSemester2.get(i)))/Float.valueOf(TotalStudents);
 			
 			Rate=Rate*100;
 			Rate= (float) (Math.round(Rate*10)/10.0);
-			System.out.println(YearAndSemester2.get(i)+", "+CouseCode+", "+CourseName+", "+TotalStudents+", "+StudentsTaken.get(YearAndSemester2.get(i))+", "+Rate+"%");
-			NumberOfCoursesTakenInEachSemester.add(YearAndSemester2.get(i)+", "+CouseCode+", "+CourseName+", "+TotalStudents+", "+StudentsTaken.get(YearAndSemester2.get(i))+", "+Rate+"%");
+			//System.out.println(YearAndSemester2.get(i)+", "+CouseCode+", "+CourseName+", "+TotalStudents+", "+StudentsTaken2.get(YearAndSemester2.get(i))+", "+Rate+"%");
+			NumberOfCoursesTakenInEachSemester.add(YearAndSemester2.get(i)+", "+CouseCode+", "+CourseName+", "+TotalStudents+", "+StudentsTaken2.get(YearAndSemester2.get(i))+", "+Rate+"%");
 			
 			//(YearAndSemester2.get(0)+","+CouseCode+","+CourseName2.get(0)+","+TotalStudents+","+StudentsTaken.get(YearAndSemester2.get(0))+","+Rate);
 		

@@ -70,7 +70,7 @@ public class Utils {
 		public static void writeAFile2(ArrayList<String> lines, String targetFileName) {
 		
 		String content="Year,Semester,CouseCode, CourseName,TotalStudents,StudentsTaken,Rate";
-		System.out.println(content);
+		//System.out.println(content);
 		 for (int count = 0 ; count < lines.size() ; count++) {
 			  content=content+"\n"+lines.get(count);
 	        }

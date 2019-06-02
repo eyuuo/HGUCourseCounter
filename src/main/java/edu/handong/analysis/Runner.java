@@ -85,15 +85,6 @@ public class Runner {
 				HGUCoursePatternAnalyzer2 analyzer2 = new HGUCoursePatternAnalyzer2();
 				analyzer2.run(arg);
 				
-				System.out.println("analysis number is " +analysis);
-				System.out.println("input is " +arg[0]);
-				System.out.println("output is " +arg[1]);
-				System.out.println("startyear is " +arg[2]);
-				System.out.println("endyear is " +arg[3]);
-				System.out.println("analysis is " +arg[4]);
-				System.out.println("coursecode is " +arg[5]);
-				
-				
 				}
 				
 			}
