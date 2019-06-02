@@ -15,7 +15,7 @@ import edu.handong.analysis.utils.Utils;
 
 
 //trim()사용해야함.
-public class HGUCoursePatternAnalyzer {
+public class HGUCoursePatternAnalyzer2 {
 				/*
 				arg[0]= input;
 				arg[1]= output;
@@ -25,6 +25,8 @@ public class HGUCoursePatternAnalyzer {
 				arg[5]= coursecode;
 				*/
 	private HashMap<String,Student> students;
+	
+	
 	/**
 	 * This method runs our analysis logic to save the number courses taken by each student per semester in a result file.
 	 * Run method must not be changed!!
@@ -46,7 +48,8 @@ public class HGUCoursePatternAnalyzer {
 	
 		
 		ArrayList<String> lines = Utils.getLines(dataPath, true);
-
+		
+		
 		students = loadStudentCourseRecords(lines,args[2],args[3]);
 		
 		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
@@ -55,7 +58,7 @@ public class HGUCoursePatternAnalyzer {
 		
 		
 		//Generate result lines to be saved.
-		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
+		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents,args[5]);
 		
 		// Write a file (named like the value of resultPath) with linesTobeSaved.
 		Utils.writeAFile(linesToBeSaved, resultPath);
@@ -114,6 +117,7 @@ public class HGUCoursePatternAnalyzer {
 		
 		
 		//<변수 설정> 
+		
 			int start = Integer.valueOf(startYear);
 			int end = Integer.valueOf(endYear);
 			Course course;
@@ -171,8 +175,10 @@ public class HGUCoursePatternAnalyzer {
 	 * @param sortedStudents
 	 * @return
 	 */
-	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents) {
-		// TODO: Implement this method
+	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents, String CouseCode) {
+		//Year,Semester,CouseCode, CourseName,TotalStudents,StudentsTaken,Rate
+		
+		
 		ArrayList<String> NumberOfCoursesTakenInEachSemester = new ArrayList<String>();
 		
 		ArrayList<String> studentID = new ArrayList<String>();
