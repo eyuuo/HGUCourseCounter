@@ -1,11 +1,10 @@
+
 package edu.handong.analysis.utils;
 
 import java.io.BufferedReader;
 import java.nio.file.*;
 import java.io.*;
 import java.util.ArrayList;
-
-
 
 public class Utils {
 	
@@ -55,6 +54,9 @@ public class Utils {
            
 			Path path = Paths.get(targetFileName);
             
+			if(Files.exists(path)==false)
+				System.out.println("output path does not exist. so I made!");
+				
             Files.createDirectories(path.getParent());
 
             Files.write(path, content.getBytes());
@@ -63,9 +65,31 @@ public class Utils {
             e.printStackTrace();
             System.exit(0);
         }
+	}
+	
+		public static void writeAFile2(ArrayList<String> lines, String targetFileName) {
 		
-		
+		String content="Year,Semester,CouseCode, CourseName,TotalStudents,StudentsTaken,Rate";
+		 for (int count = 0 ; count < lines.size() ; count++) {
+			  content=content+"\n"+lines.get(count);
+	        }
+		try {
+			//그냥 파일이름만 적었을때를 위해.
+			if(targetFileName.contains("/")==false) targetFileName = "./"+targetFileName;
+           
+			Path path = Paths.get(targetFileName);
+            
+			if(Files.exists(path)==false)
+				System.out.println("output path does not exist. so I made!");
+				
+            Files.createDirectories(path.getParent());
 
+            Files.write(path, content.getBytes());
+            //System.out.println(Files.readAllLines(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
 	}
 
 }

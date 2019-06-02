@@ -23,7 +23,7 @@ public class Course {
 	public Course(String line) {
 
 		setStudentId(line.split(",")[0]);
-		this.yearMonthGraduated = line.split(",")[1].trim();
+		this.setYearMonthGraduated(line.split(",")[1].trim());
 		this.firstMajor = line.split(",")[2].trim();
 		this.secondMajor = line.split(",")[3].trim();
 		this.courseCode = line.split(",")[4].trim();
@@ -76,6 +76,16 @@ public class Course {
 
 	public void setSemesterCourseTaken(int semesterCourseTaken) {
 		this.semesterCourseTaken = semesterCourseTaken;
+	}
+
+
+	public String getYearMonthGraduated() {
+		return yearMonthGraduated;
+	}
+
+
+	public void setYearMonthGraduated(String yearMonthGraduated) {
+		this.yearMonthGraduated = yearMonthGraduated;
 	}
 	
 

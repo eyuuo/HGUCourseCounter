@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import edu.handong.analysis.datamodel.Course;
@@ -12,10 +13,19 @@ import edu.handong.analysis.datamodel.Student;
 import edu.handong.analysis.utils.NotEnoughArgumentException;
 import edu.handong.analysis.utils.Utils;
 
+
 //trim()사용해야함.
 public class HGUCoursePatternAnalyzer {
-
+				/*
+				arg[0]= input;
+				arg[1]= output;
+				arg[2]= startyear;
+				arg[3]= endyear;
+				arg[4]= analysis;
+				arg[5]= coursecode;
+				*/
 	private HashMap<String,Student> students;
+	private HashMap<String,Student> students2;
 	
 	/**
 	 * This method runs our analysis logic to save the number courses taken by each student per semester in a result file.
@@ -30,22 +40,26 @@ public class HGUCoursePatternAnalyzer {
 				throw new NotEnoughArgumentException();
 		} catch (NotEnoughArgumentException e) {
 			System.out.println(e.getMessage());
-			System.exit(0);//파일의 경로가 올바르지 않을때. 
+			System.exit(0);
 		} 
 		
 		String dataPath = args[0]; // csv file to be analyzed 
 		String resultPath = args[1]; // the file path where the results are saved.
 		
-		//지우기
+		//지우기*****
 		System.out.println("dataPath : "+dataPath);
 		System.out.println("resultPath : "+resultPath);
 		
 		ArrayList<String> lines = Utils.getLines(dataPath, true);
 		
-		students = loadStudentCourseRecords(lines);
+		//students2 = loadStudentCourseRecords(lines,args[2],args[3]);
+		//students = loadStudentCourseRecords(lines);
+		students = loadStudentCourseRecords(lines,args[2],args[3]);
 		
 		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
 		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students); 
+		//Map<String, Student> sortedStudents2 = new TreeMap<String,Student>(students2); 
+		
 		
 		//Generate result lines to be saved.
 		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
@@ -66,8 +80,6 @@ public class HGUCoursePatternAnalyzer {
 	private HashMap<String,Student> loadStudentCourseRecords(ArrayList<String> lines) {
 		
 	//<변수 설정> 
-		int k=0;//addCoure가 잘 되었는지 확인할 때 쓰는 보조 변수.
-		int kk=0;//id모으기1 - 학생의 아이디를 String에 저장할 때 중복을 피하기 위해 만든 변수.
 		Course course;
 		Student student;
 		HashMap<String,Student> students = new HashMap<String,Student>();
@@ -81,7 +93,7 @@ public class HGUCoursePatternAnalyzer {
 		for(int i = 0; i< lines.size();i++)
 			key.add(lines.get(i).split(",")[0]);
 		
-		//학생 ID 모으기2 정렬을 위해 arraylist를 사용한다.->안해도 될지도??------------마지막에 확인.
+		//학생 ID 모으기2 정렬을 위해 arraylist를 사용한다.
 		ArrayList<String> keylist = new ArrayList<String>(key); 
 		Collections.sort(keylist);
 		
@@ -101,11 +113,59 @@ public class HGUCoursePatternAnalyzer {
 		//잘 push되었는지 확인 
 		//System.out.print(students.get("0002").getCoursesTaken().get(0).getCourseName());
 
-	
-		
 		return students; // do not forget to return a proper variable.
 	}
 
+	// HashMap<String,Student> students의 값을 처음부터 start, end로 거른다.
+	private HashMap<String,Student> loadStudentCourseRecords(ArrayList<String> lines,String startYear, String endYear) {
+		
+		
+		//<변수 설정> 
+			int start = Integer.valueOf(startYear);
+			int end = Integer.valueOf(endYear);
+			Course course;
+			Student student;
+			HashMap<String,Student> students = new HashMap<String,Student>();
+			
+			
+		//<put위한 과정.>
+			//반복 : for 반목문으 파일의 모든 학생들을의 아이디를 읽는다. 그리고 그 수만큼 put.
+			
+			//학생 ID 모으기 hashset이용 ->Sorting 필요
+			HashSet<String> key = new HashSet<String>();
+			for(int i = 0; i< lines.size();i++)
+				key.add(lines.get(i).split(",")[0]);
+			
+			//학생 ID 모으기 정렬을 위해 arraylist를 사용한다.
+			ArrayList<String> keylist = new ArrayList<String>(key); 
+			Collections.sort(keylist);
+			
+			for(int j=0;j<keylist.size();j++) {
+			//addCourse	
+				student = new Student(keylist.get(j));//다음 학생!!
+				//라인중에서 studentId와 같은 ID를 가지고 있는 코스만 addCourse하고 students에 넣는다.
+				for(int i = 0; i< lines.size();i++) {
+					if(lines.get(i).split(",")[0].equals(keylist.get(j))){
+						course = new Course(lines.get(i));
+						
+						//들은 년도 거르기**!!!!!
+						if(course.getYearTaken()>=start&&course.getYearTaken()<= end) {
+							student.addCourse(course);
+							//System.out.println("들은 년도 확인  : "+course.getYearTaken());
+						}
+							
+						}//if1_아이디가 일치하는 line만 Course로.
+					}//for-i	
+			//hash Map에 학생 정보 넣기 
+					students.put(keylist.get(j), student);			
+			}//for-j
+			//잘 push되었는지 확인 
+			//System.out.print(students.get("0002").getCoursesTaken().get(0).getCourseName());
+
+			return students; // do not forget to return a proper variable.
+		}
+
+	
 	/**
 	 * This method generate the number of courses taken by a student in each semester. The result file look like this:
 	 * StudentID, TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester 
@@ -126,10 +186,6 @@ public class HGUCoursePatternAnalyzer {
 		ArrayList<Integer> TotalNumberOfSemestersRegistered = new ArrayList<Integer>();
 		
 		HashMap<String,Integer> semestersByYearAndSemester = new HashMap<String,Integer>();
-		
-		
-		//String StudentID,
-		String  Semester,NumCoursesTakenInTheSemester;
 		
 		//ID얻기 
 		for (String studentIDKey : sortedStudents.keySet())
@@ -156,4 +212,7 @@ public class HGUCoursePatternAnalyzer {
 		
 		return NumberOfCoursesTakenInEachSemester; // do not forget to return a proper variable.
 	}
+	
+	
+	
 }
