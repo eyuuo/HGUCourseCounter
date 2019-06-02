@@ -1,13 +1,4 @@
-StudentID, TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester
-0001, 12, 1, 8
-0001, 12, 2, 1
-0001, 12, 3, 8
-0001, 12, 4, 7
-0001, 12, 5, 1
-0001, 12, 6, 8
-0001, 12, 7, 6
-0001, 12, 8, 1
-0001, 12, 9, 4
-0001, 12, 10, 3
-0001, 12, 11, 1
-0001, 12, 12, 1
+Year,Semester,CouseCode, CourseName,TotalStudents,StudentsTaken,Rate
+2002, 1, GEK10008, 공동체리더십훈련1, 6, 4, 66.7%
+2002, 2, GEK10008, 공동체리더십훈련1, 6, 3, 50.0%
+2003, 1, GEK10008, 공동체리더십훈련1, 6, 5, 83.3%

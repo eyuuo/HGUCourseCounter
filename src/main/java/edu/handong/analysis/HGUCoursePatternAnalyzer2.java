@@ -49,19 +49,11 @@ public class HGUCoursePatternAnalyzer2 {
 		
 		ArrayList<String> lines = Utils.getLines(dataPath, true);
 		
-		
-		students = loadStudentCourseRecords(lines,args[2],args[3]);
-		
-		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
-		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students); 
-		//Map<String, Student> sortedStudents2 = new TreeMap<String,Student>(students2); 
-		
-		
 		//Generate result lines to be saved.
-		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents,args[5]);
+		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(args[5],lines,args[2],args[3]);
 		
 		// Write a file (named like the value of resultPath) with linesTobeSaved.
-		Utils.writeAFile(linesToBeSaved, resultPath);
+		Utils.writeAFile2(linesToBeSaved, resultPath);
 		
 		
 	}
@@ -173,41 +165,73 @@ public class HGUCoursePatternAnalyzer2 {
 	 * 0001,14,1,9 => this means, 0001 student registered 14 semeters in total. In the first semeter (1), the student took 9 courses.
 	 * ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
 	 * @param sortedStudents
-	 * @return
+	 * @return 
 	 */
-	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents, String CouseCode) {
+	private ArrayList<String> countNumberOfCoursesTakenInEachSemester( String CouseCode, ArrayList<String> lines,String startYear, String endYear) {
+		int start = Integer.valueOf(startYear);
+		int end = Integer.valueOf(endYear);
 		//Year,Semester,CouseCode, CourseName,TotalStudents,StudentsTaken,Rate
+		HashSet<String> YearAndSemester = new HashSet<String>();
+		//HashSet<String> CourseName = new HashSet<String>();
+		String CourseName=null;
+		int TotalStudents=0;
 		
+		int Students=0;
+		HashMap<String,Integer> StudentsTaken = new HashMap<String,Integer>();
+		float Rate=0;//=TotalStudents/StudentsTaken..
+		Course course;
+		 
 		
 		ArrayList<String> NumberOfCoursesTakenInEachSemester = new ArrayList<String>();
 		
-		ArrayList<String> studentID = new ArrayList<String>();
-		ArrayList<Integer> TotalNumberOfSemestersRegistered = new ArrayList<Integer>();
-		
-		HashMap<String,Integer> semestersByYearAndSemester = new HashMap<String,Integer>();
-		
-		//ID얻기 
-		for (String studentIDKey : sortedStudents.keySet())
-		{
-			studentID.add(studentIDKey);
-			//System.out.println("studentID: "+studentIDKey);
-		}
-		
-		//TotalNumberOfSemestersRegistered
-		for(int i =0;i<studentID.size();i++) {
-			semestersByYearAndSemester =  sortedStudents.get(studentID.get(i)).getSemestersByYearAndSemester();
-			TotalNumberOfSemestersRegistered.add(semestersByYearAndSemester.size());
-			//System.out.println("TotalNumberOfSemestersRegistered: "+TotalNumberOfSemestersRegistered.get(i));			
-		}
-		
-		for(int i =0;i<studentID.size();i++) {
-			for(int j=0;j<TotalNumberOfSemestersRegistered.get(i);j++) {
-				NumberOfCoursesTakenInEachSemester.add(studentID.get(i)+", "
-						+TotalNumberOfSemestersRegistered.get(i)+", "+(j+1)+", "+sortedStudents.get(studentID.get(i)).getNumCourseInNthSementer(j+1));
-				//System.out.println("total: "+studentID.get(i)+", "
-				//		+TotalNumberOfSemestersRegistered.get(i)+", "+(j+1)+", "+sortedStudents.get(studentID.get(i)).getNumCourseInNthSementer(j+1));
+		for(int i=0; i<lines.size();i++) {
+			course = new Course(lines.get(i));
+			if(CouseCode.equals(course.getCourseCode()))
+				{
+				if(course.getYearTaken()>=start&&course.getYearTaken()<end) 
+				{
+					CourseName = course.getCourseName();
+					YearAndSemester.add(course.getYearTaken()+", "+course.getSemesterCourseTaken());
+					//if()
+					//Students++;
+					StudentsTaken.put(course.getYearTaken()+", "+course.getSemesterCourseTaken(),Students++);
+					TotalStudents++;
+				}
+				
 			}	
+			
 		}
+		
+		
+		//돌리고 넣
+		ArrayList<String> YearAndSemester2 = new ArrayList<String>(YearAndSemester); 
+		Collections.sort(YearAndSemester2);
+	
+		
+		for(int i=0; i<YearAndSemester2.size();i++) {
+			Rate = Float.valueOf(StudentsTaken.get(YearAndSemester2.get(i)))/Float.valueOf(TotalStudents);
+			
+			Rate=Rate*100;
+			Rate= (float) (Math.round(Rate*10)/10.0);
+			System.out.println(YearAndSemester2.get(i)+", "+CouseCode+", "+CourseName+", "+TotalStudents+", "+StudentsTaken.get(YearAndSemester2.get(i))+", "+Rate+"%");
+			NumberOfCoursesTakenInEachSemester.add(YearAndSemester2.get(i)+", "+CouseCode+", "+CourseName+", "+TotalStudents+", "+StudentsTaken.get(YearAndSemester2.get(i))+", "+Rate+"%");
+			
+			//(YearAndSemester2.get(0)+","+CouseCode+","+CourseName2.get(0)+","+TotalStudents+","+StudentsTaken.get(YearAndSemester2.get(0))+","+Rate);
+		
+		}
+		
+		//System.out.println(NumberOfCoursesTakenInEachSemester);
+			
+		/*
+		
+		
+		for(int i=0; i<lines.size();i++) {
+			NumberOfCoursesTakenInEachSemester.add(YearAndSemester2.get(0)+","+CouseCode+","+CourseName2.get(i)+","+TotalStudents+","+StudentsTaken+","+Rate);
+			System.out.println(NumberOfCoursesTakenInEachSemester.get(i));
+		}
+		*/
+		
+		
 		
 		return NumberOfCoursesTakenInEachSemester; // do not forget to return a proper variable.
 	}

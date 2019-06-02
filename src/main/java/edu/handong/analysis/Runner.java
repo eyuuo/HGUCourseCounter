@@ -94,9 +94,6 @@ public class Runner {
 				System.out.println("coursecode is " +arg[5]);
 				
 				
-				HGUCoursePatternAnalyzer analyzer = new HGUCoursePatternAnalyzer();
-				analyzer.run(arg);
-				
 				}
 				
 			}
